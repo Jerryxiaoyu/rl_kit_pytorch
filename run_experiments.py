@@ -9,7 +9,16 @@ import utils.ssh as ssh
 class VG(VariantGenerator):
     @variant
     def env_name(self):
-        return [ 'Reacher-v2' , 'Pusher-v2', 'Thrower-v2','Striker-v2','HalfCheetah-v2','Hopper-v2','Swimmer-v2','Walker2d-v2','Ant-v2','Humanoid-v2']  # 'CellrobotEnv-v0' , 'Cellrobot2Env-v0', 'CellrobotSnakeEnv-v0'  , 'CellrobotSnake2Env-v0','CellrobotButterflyEnv-v0', 'CellrobotBigdog2Env-v0'
+        """
+        gym : 'Reacher-v2' , 'Pusher-v2', 'Thrower-v2','Striker-v2','HalfCheetah-v2','Hopper-v2','Swimmer-v2','Walker2d-v2','Ant-v2','Humanoid-v2'
+        pybullet :'MinitaurBulletEnv-v0'
+
+
+        pybullet :'MinitaurBulletEnv-v0', 'MinitaurBallGymEnv-v0','KukaBulletEnv-v0','InvertedDoublePendulumBulletEnv-v0','ReacherBulletEnv-v0','HalfCheetahBulletEnv-v0','AntBulletEnv-v0',
+                'HopperBulletEnv-v0', 'HumanoidBulletEnv-v0'
+        """
+
+        return ['LaikagoBulletEnv-v1', 'LaikagoTorqueBulletEnv-v1' ]#,
 
     @variant
     def seed(self):
@@ -56,17 +65,17 @@ class VG(VariantGenerator):
 algo ='ppo'
 
 
-exp_id = 1
+exp_id = 5
 EXP_NAME ='_{}_RL'.format(algo)
 group_note ="************ABOUT THIS EXPERIMENT****************\n" \
             "  " \
         " "
-
+n_cpu =  8
 
 ssh_FLAG = False
 AWS_logpath = '/home/drl/PycharmProjects/rl_baselines/pytorch-a2c-ppo-acktr/log-files/AWS_logfiles/'
-n_cpu =  8
-num_threads = 32
+
+
 
 
 # print choices

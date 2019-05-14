@@ -29,6 +29,8 @@ except ImportError:
     pass
 
 
+from my_model import *
+
 def make_env(env_id, seed, rank, log_dir, allow_early_resets):
     def _thunk():
         if env_id.startswith("dm"):

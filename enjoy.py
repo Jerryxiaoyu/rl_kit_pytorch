@@ -21,11 +21,11 @@ parser.add_argument(
     help='log interval, one log per n updates (default: 10)')
 parser.add_argument(
     '--env-name',
-    default='PongNoFrameskip-v4',
+    default='LaikagoBulletEnv-v1',
     help='environment to train on (default: PongNoFrameskip-v4)')
 parser.add_argument(
     '--load-dir',
-    default='./trained_models/',
+    default='log-files/Apr_26_ppo_RL_Exp4/No_1_LaikagoBulletEnv-v1_PPO-2019-04-26_11:43:32/model/ppo',
     help='directory to save agent logs (default: ./trained_models/)')
 parser.add_argument(
     '--non-det',
@@ -35,6 +35,8 @@ parser.add_argument(
 args = parser.parse_args()
 
 args.det = not args.non_det
+use_cuda = torch.cuda.is_available()
+device = torch.device('cuda:0' if use_cuda else 'cpu')
 
 env = make_vec_envs(
     args.env_name,
@@ -63,8 +65,9 @@ masks = torch.zeros(1, 1)
 
 obs = env.reset()
 
+render_mode = 'rgb_array' #'human'
 if render_func is not None:
-    render_func('human')
+    render_func(render_mode)
 
 if args.env_name.find('Bullet') > -1:
     import pybullet as p
@@ -76,6 +79,9 @@ if args.env_name.find('Bullet') > -1:
 
 while True:
     with torch.no_grad():
+        obs = obs.to(device)
+        recurrent_hidden_states = recurrent_hidden_states.to(device)
+        masks = masks.to(device)
         value, action, _, recurrent_hidden_states = actor_critic.act(
             obs, recurrent_hidden_states, masks, deterministic=args.det)
 
@@ -92,4 +98,4 @@ while True:
             p.resetDebugVisualizerCamera(distance, yaw, -20, humanPos)
 
     if render_func is not None:
-        render_func('human')
+        render_func(render_mode)
